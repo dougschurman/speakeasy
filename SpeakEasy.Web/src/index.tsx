@@ -1,12 +1,25 @@
+import { CssBaseline, responsiveFontSizes } from "@mui/material";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 import React from "react";
 import ReactDOM from "react-dom";
+import { themeConfig } from "../theme.config";
+import Root from "./routes/index";
 
 const App = () => {
   return (
-    <div>
-      <h1>Create React App from Scratch Using Typescript..!!</h1>
-    </div>
+    <ThemeProvider theme={theme}>
+      <CssBaseline>
+        <Root />
+      </CssBaseline>
+    </ThemeProvider>
   );
 };
 
-ReactDOM.render(<App />, document.querySelector("#mountNode"));
+const theme = responsiveFontSizes(
+  createTheme({
+    palette: themeConfig.palette,
+    typography: themeConfig.typography,
+  })
+);
+
+ReactDOM.render(<App />, document.getElementById("mountNode"));

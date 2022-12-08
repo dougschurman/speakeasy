@@ -5,6 +5,7 @@ import {
   Container,
   Paper,
   Typography,
+  Divider,
 } from "@mui/material";
 import * as React from "react";
 
@@ -23,7 +24,7 @@ const Lobby = (props: IProps) => {
 
   return (
     <Container>
-      <Paper>
+      <Paper elevation={4}>
         <Box
           component="form"
           id="lobby"
@@ -40,6 +41,7 @@ const Lobby = (props: IProps) => {
           <Typography fontSize="28px" color="primary">
             Join a Room
           </Typography>
+          <Divider sx={{ width: "100%" }} />
           <TextField
             label="Username"
             variant="outlined"

@@ -8,11 +8,15 @@ import {
 } from "@microsoft/signalr";
 import Chat from "./chat/Chat";
 
+export interface Message {
+  user: string;
+  text: string;
+}
+
 export default function Root() {
   const [connection, setConnection] = React.useState<HubConnection>();
-  const [messages, setMessages] = React.useState<
-    { user: string; message: string }[]
-  >([]);
+  const [messages, setMessages] = React.useState<Message[]>([]);
+  const [users, setUsers] = React.useState<string[]>([]);
 
   const joinRoom = async (user: string, room: string) => {
     try {
@@ -21,8 +25,20 @@ export default function Root() {
         .configureLogging(LogLevel.Information)
         .build();
 
-      connection.on("ReceiveMessage", (user: string, message: string) => {
-        setMessages((prev) => [...prev, { user, message }]);
+      connection.on("UsersInRoom", (userList: string[]) => {
+        setUsers(userList);
+        console.log(userList);
+        console.log(users);
+      });
+
+      connection.on("ReceiveMessage", (user: string, text: string) => {
+        setMessages((prev) => [...prev, { user, text }]);
+      });
+
+      connection.onclose((e) => {
+        setConnection(null);
+        setMessages([]);
+        setUsers([]);
       });
 
       await connection.start();
@@ -33,13 +49,30 @@ export default function Root() {
       console.log(e);
     }
   };
+
+  const closeConnection = async () => {
+    try {
+      await connection.stop();
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const sendMessage = async (message: string) => {
+    try {
+      await connection.invoke("SendMessage", message);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   return (
     <>
-      <Header />
+      <Header connection={connection} closeConnection={closeConnection} />
       {!connection ? (
         <Lobby joinRoom={joinRoom} />
       ) : (
-        <Chat messages={messages} />
+        <Chat messages={messages} sendMessage={sendMessage} users={users} />
       )}
     </>
   );

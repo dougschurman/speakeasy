@@ -1,18 +1,19 @@
 import { Box, Paper, Typography } from "@mui/material";
 import * as React from "react";
+import { Message } from "..";
 
 interface IProps {
-  message: { user: string; message: string };
+  message: Message;
 }
 
 const MessageBubble = (props: IProps) => {
   return (
-    <Box>
+    <>
       <Paper elevation={2} sx={{ color: "primary" }}>
-        <Typography>{props.message.message}</Typography>
+        <Typography>{props.message.text}</Typography>
       </Paper>
       <Typography>{props.message.user}</Typography>
-    </Box>
+    </>
   );
 };
 

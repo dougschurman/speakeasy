@@ -34,6 +34,7 @@ const SendMessageTextBox = (props: IProps) => {
         variant="outlined"
         onChange={(e) => setMessage(e.target.value)}
         value={message}
+        autoComplete="off"
       ></TextField>
       <IconButton type="submit" disabled={!message}>
         <SendIcon fontSize="large" sx={{ ml: 1 }} />

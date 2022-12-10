@@ -32,9 +32,9 @@ msbuild.wrn
 
 # Visual Studio 2015
 .vs/
-BassLines.Api/appsettings.Development.json
+SpeakEasy.Api/appsettings.Development.json
 node_modules/
-BassLines.Api/wwwroot/*
-BassLines.Api/logs/
-BassLines.Web/.yarn/*
-BassLines.Web/dist/
+SpeakEasy.Api/wwwroot/*
+SpeakEasy.Api/logs/
+SpeakEasy.Web/.yarn/*
+SpeakEasy.Web/dist/

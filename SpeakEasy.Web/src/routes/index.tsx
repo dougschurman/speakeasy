@@ -17,6 +17,8 @@ export default function Root() {
   const [connection, setConnection] = React.useState<HubConnection>();
   const [messages, setMessages] = React.useState<Message[]>([]);
   const [users, setUsers] = React.useState<string[]>([]);
+  const [currentUser, setCurrentUser] = React.useState<string>();
+  const [room, setRoom] = React.useState<string>();
 
   const joinRoom = async (user: string, room: string) => {
     try {
@@ -43,6 +45,7 @@ export default function Root() {
 
       await connection.start();
       await connection.invoke("JoinRoom", { user, room });
+      setRoom(room);
 
       setConnection(connection);
     } catch (e) {
@@ -68,11 +71,24 @@ export default function Root() {
 
   return (
     <>
-      <Header connection={connection} closeConnection={closeConnection} />
+      <Header
+        connection={connection}
+        closeConnection={closeConnection}
+        users={users}
+      />
       {!connection ? (
-        <Lobby joinRoom={joinRoom} />
+        <Lobby
+          joinRoom={joinRoom}
+          user={currentUser}
+          setUser={setCurrentUser}
+        />
       ) : (
-        <Chat messages={messages} sendMessage={sendMessage} users={users} />
+        <Chat
+          messages={messages}
+          sendMessage={sendMessage}
+          currentUser={currentUser}
+          room={room}
+        />
       )}
     </>
   );

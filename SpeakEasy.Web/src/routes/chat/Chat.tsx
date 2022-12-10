@@ -1,4 +1,11 @@
-import { Box, Container, IconButton, Paper } from "@mui/material";
+import {
+  Box,
+  Container,
+  Divider,
+  IconButton,
+  Paper,
+  Typography,
+} from "@mui/material";
 import makeStyles from "@mui/styles/makeStyles";
 import * as React from "react";
 import { Message } from "..";
@@ -9,7 +16,8 @@ import MessageTextBox from "./MessageTextBox";
 interface IProps {
   messages: Message[];
   sendMessage: (message: string) => void;
-  users: string[];
+  currentUser: string;
+  room: string;
 }
 
 const Chat = (props: IProps) => {
@@ -17,34 +25,48 @@ const Chat = (props: IProps) => {
   const classes = useStyles();
 
   React.useEffect(() => {
-    if (messageRef && messageRef.current) {
-      const { scrollHeight, clientHeight } = messageRef.current;
-      messageRef.current.scrollTo({
-        left: 0,
-        top: scrollHeight - clientHeight,
-        behavior: "smooth",
-      });
-    }
+    messageRef.current.scrollIntoView({ behavior: "smooth" });
   }, [props.messages]);
   return (
     <Container>
       <Paper
         elevation={4}
-        sx={{ height: "89vh", padding: "20px 20px", position: "relative" }}
+        sx={{ height: "80vh", padding: "20px 20px", position: "relative" }}
       >
+        <Typography
+          fontSize="24px"
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          {props.room}
+        </Typography>
+        <Divider sx={{ width: "100%", mb: "8px" }} />
         <Box
-          sx={{ padding: "0px 0px 60px 0px", width: "100%", height: "100%" }}
+          sx={{
+            width: "100%",
+            height: "100%",
+            maxHeight: "64vh",
+          }}
           className={classes.container}
         >
           {props.messages.map((m, index) => (
-            <div ref={messageRef} key={index}>
-              <MessageBubble message={m} />
+            <div
+              key={index}
+              style={{
+                marginBottom: "4px",
+                textAlign: props.currentUser == m.user ? "right" : "left",
+              }}
+            >
+              <MessageBubble message={m} currentUser={props.currentUser} />
             </div>
           ))}
+          <span ref={messageRef} />
         </Box>
         <MessageTextBox sendMessage={props.sendMessage} />
       </Paper>
-      <ConnectedUsers users={props.users} />
     </Container>
   );
 };
@@ -53,22 +75,17 @@ export default Chat;
 
 const useStyles = makeStyles({
   container: {
-    // paddingBottom: "4px",
-    // display: "flex",
-    // flexDirection: "column",
-    // width: "100%",
-    // height: "calc(100vh - 168px)",
     overflowY: "auto",
     "&::-webkit-scrollbar": {
-      width: "8px",
-      height: "8px",
-      borderRadius: "4px",
+      width: "4px",
+      height: "4px",
     },
     "&::-webkit-scrollbar-track": {
-      boxShadow: "rgba(0, 0, 0, 0.2)",
+      borderRadius: "4px",
     },
     "&::-webkit-scrollbar-thumb": {
       backgroundColor: "rgba(0, 0, 0, 0.4)",
+      borderRadius: "4px",
     },
   },
 });

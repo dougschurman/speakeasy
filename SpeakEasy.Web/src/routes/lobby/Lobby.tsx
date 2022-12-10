@@ -11,15 +11,16 @@ import * as React from "react";
 
 interface IProps {
   joinRoom: (user: string, room: string) => void;
+  user: string;
+  setUser: (name: string) => void;
 }
 
 const Lobby = (props: IProps) => {
-  const [user, setUser] = React.useState<string>(null);
   const [room, setRoom] = React.useState<string>(null);
 
   const handleSubmit = (e: React.FormEvent<HTMLInputElement>) => {
     e.preventDefault();
-    props.joinRoom(user, room);
+    props.joinRoom(props.user, room);
   };
 
   return (
@@ -46,8 +47,9 @@ const Lobby = (props: IProps) => {
             label="Username"
             variant="outlined"
             type="text"
-            onChange={(e) => setUser(e.target.value)}
+            onChange={(e) => props.setUser(e.target.value)}
             required
+            autoComplete="off"
           />
           <TextField
             label="Room Code"
@@ -55,8 +57,13 @@ const Lobby = (props: IProps) => {
             type="text"
             onChange={(e) => setRoom(e.target.value)}
             required
+            autoComplete="off"
           />
-          <Button type="submit" variant="contained" disabled={!user || !room}>
+          <Button
+            type="submit"
+            variant="contained"
+            disabled={!props.user || !room}
+          >
             <Typography>Join</Typography>
           </Button>
         </Box>

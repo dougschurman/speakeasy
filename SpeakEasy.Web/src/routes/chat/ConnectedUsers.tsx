@@ -44,6 +44,7 @@ const ConnectedUsers = (props: IProps) => {
           <Box>
             {props.users.map((user: string, index) => (
               <Paper
+                key={index}
                 elevation={2}
                 sx={{
                   color: "primary",
@@ -55,9 +56,7 @@ const ConnectedUsers = (props: IProps) => {
                   mb: 1,
                 }}
               >
-                <Typography key={index} color="black">
-                  {user}
-                </Typography>
+                <Typography color="black">{user}</Typography>
               </Paper>
             ))}
           </Box>

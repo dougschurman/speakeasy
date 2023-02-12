@@ -17,9 +17,12 @@ interface IProps {
 
 const Lobby = (props: IProps) => {
   const [room, setRoom] = React.useState<string>(null);
+  const [submitted, setSubmitted] = React.useState(false);
 
   const handleSubmit = (e: React.FormEvent<HTMLInputElement>) => {
+    if (submitted) return;
     e.preventDefault();
+    setSubmitted(true);
     props.joinRoom(props.user, room);
   };
 
@@ -62,7 +65,7 @@ const Lobby = (props: IProps) => {
           <Button
             type="submit"
             variant="contained"
-            disabled={!props.user || !room}
+            disabled={!props.user || !room} //TODO disable spam clicking of button to cause multiple connections
           >
             <Typography>Join</Typography>
           </Button>
